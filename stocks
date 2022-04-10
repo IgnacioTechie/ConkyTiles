@@ -1,0 +1,64 @@
+conky.config = {
+	use_xft = true,
+	font = 'URW Gothic L:size=14',
+	xftalpha = 0.8,
+	text_buffer_size = 2048,
+	max_text_width = 0,
+	override_utf8_locale = true,
+	uppercase = false,
+	no_buffers = true,
+	short_units = true,
+	format_human_readable = true,
+
+	update_interval = 1,
+	total_run_times = 0,
+
+	own_window = true,
+	own_window_transparent = false,
+	own_window_type = 'desktop',
+	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+        own_window_argb_visual = true,
+        own_window_argb_value = 128,
+	background = true,
+	use_spacer = 'none',
+
+	double_buffer = true,
+	minimum_width = 210, minimum_height = 200,
+
+	draw_shades = false,
+	default_shade_color = '#000000',
+
+	draw_outline = false,
+	default_outline_color = '#000000',
+
+	default_color = 'FFFFFF', 
+	color0 = 'FFFFFF',
+	color1 = 'FFA300',
+
+	draw_borders = false,
+	stippled_borders = 0,
+	border_inner_margin = 4,
+	border_outer_margin = 0,
+	border_width = 10,
+	draw_graph_borders = false,--no
+	alignment = 'top_left',
+
+	gap_x = 312,
+	gap_y = 312,
+
+	imlib_cache_size = 0,
+};
+
+conky.text = [[
+#NASDAQ
+${color1}NASDAQ${color0}
+${execi 600 curl -sX 'GET'   'https://yfapi.net/v6/finance/quote?region=US&lang=en&symbols=%5EIXIC'   -H 'accept: application/json'   -H 'X-API-KEY: KM8pRNLcdr48gjH7sWwXSaYL23BiYjzI5DtAjmir' | jq -r '.quoteResponse.result[0].regularMarketPrice' | xargs printf "%0.2f"}${alignr}${execi 600 curl -sX 'GET'   'https://yfapi.net/v6/finance/quote?region=US&lang=en&symbols=%5EIXIC'   -H 'accept: application/json'   -H 'X-API-KEY: KM8pRNLcdr48gjH7sWwXSaYL23BiYjzI5DtAjmir' | jq -r '.quoteResponse.result[0].regularMarketChangePercent' | xargs printf "%+0.1f%%"}
+#QCOM
+${voffset 10}${color1}QCOM${color0}
+${execi 600 curl -sX 'GET'   'https://yfapi.net/v6/finance/quote?region=US&lang=en&symbols=QCOM'   -H 'accept: application/json'   -H 'X-API-KEY: KM8pRNLcdr48gjH7sWwXSaYL23BiYjzI5DtAjmir' | jq -r '.quoteResponse.result[0].regularMarketPrice' | xargs printf "%0.2f"} ${alignr}${execi 600 curl -sX 'GET'   'https://yfapi.net/v6/finance/quote?region=US&lang=en&symbols=QCOM'   -H 'accept: application/json'   -H 'X-API-KEY: KM8pRNLcdr48gjH7sWwXSaYL23BiYjzI5DtAjmir' | jq -r '.quoteResponse.result[0].regularMarketChangePercent' | xargs printf "%+0.1f%%"}
+#
+#CLP/USD
+${voffset 10}${color1}CLP/USD${color0}
+${execi 600 curl -sX 'GET'   'https://yfapi.net/v6/finance/quote?region=US&lang=en&symbols=USDCLP%3DX'   -H 'accept: application/json'   -H 'X-API-KEY: KM8pRNLcdr48gjH7sWwXSaYL23BiYjzI5DtAjmir' | jq -r '.quoteResponse.result[0].regularMarketPrice' | xargs printf "%0.2f"}${alignr}${execi 600 curl -sX 'GET'   'https://yfapi.net/v6/finance/quote?region=US&lang=en&symbols=USDCLP%3DX'   -H 'accept: application/json'   -H 'X-API-KEY: KM8pRNLcdr48gjH7sWwXSaYL23BiYjzI5DtAjmir' | jq -r '.quoteResponse.result[0].regularMarketChangePercent' | xargs printf "%+0.1f%%"}
+#
+]];

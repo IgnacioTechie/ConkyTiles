@@ -1,0 +1,66 @@
+conky.config = {
+	use_xft = true,
+	font = 'URW Gothic L:size=10',
+	xftalpha = 0.8,
+	text_buffer_size = 2048,
+	max_text_width = 0,
+	override_utf8_locale = true,
+	uppercase = false,
+	no_buffers = true,
+	short_units = true,
+	format_human_readable = true,
+
+	update_interval = 1,
+	total_run_times = 0,
+
+	own_window = true,
+	own_window_transparent = false,
+	own_window_type = 'desktop',
+	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+        own_window_argb_visual = true,
+        own_window_argb_value = 128,
+	background = true,
+	use_spacer = 'none',
+
+	double_buffer = true,
+	minimum_width = 430, minimum_height = 215,
+	maximum_width = 430,
+
+	draw_shades = false,
+	default_shade_color = '#000000',
+
+	draw_outline = false,
+	default_outline_color = '#000000',
+
+	default_color = 'FFFFFF', 
+	color0 = 'FFFFFF',
+	color1 = 'AAAAAA',
+	color2 = 'FFA300',
+
+	draw_borders = false,
+	stippled_borders = 0,
+	border_inner_margin = 10,
+	border_outer_margin = 0,
+	border_width = 1,
+	draw_graph_borders = false,--no
+	alignment = 'top_left',
+
+	gap_x = 570,
+	gap_y = 49,
+
+	imlib_cache_size = 0,
+};
+
+
+conky.text = [[
+#
+${font URW Gothic L:size=15}${color2}${voffset 10}News
+${voffset 3}${font URW Gothic L:size=10}${color0}${rss http://feeds.bbci.co.uk/news/world/rss.xml 300 item_title 0}
+${voffset 7}${font URW Gothic L:size=10}${color1}${rss http://feeds.bbci.co.uk/news/world/rss.xml 300 item_title 1}
+${voffset 7}${font URW Gothic L:size=10}${color0}${rss http://feeds.bbci.co.uk/news/world/rss.xml 300 item_title 2}
+${voffset 7}${font URW Gothic L:size=10}${color1}${rss http://feeds.bbci.co.uk/news/world/rss.xml 300 item_title 3}
+${voffset 7}${font URW Gothic L:size=10}${color0}${rss http://feeds.bbci.co.uk/news/world/rss.xml 300 item_title 4}
+${voffset 7}${font URW Gothic L:size=10}${color1}${rss http://feeds.bbci.co.uk/news/world/rss.xml 300 item_title 5}
+${voffset 7}${font URW Gothic L:size=10}${color0}${rss http://feeds.bbci.co.uk/news/world/rss.xml 300 item_title 6}
+#
+]];

@@ -1,0 +1,88 @@
+conky.config = {
+	use_xft = true,
+	font = 'URW Gothic L:size=15',
+	xftalpha = 0.8,
+	text_buffer_size = 2048,
+	max_text_width = 0,
+	override_utf8_locale = true,
+	uppercase = false,
+	no_buffers = true,
+	short_units = true,
+	format_human_readable = true,
+
+	update_interval = 1,
+	total_run_times = 0,
+
+	own_window = true,
+	own_window_transparent = false,
+	own_window_type = 'desktop',
+	own_window_hints = 'undecorated,below,sticky,skip_taskbar,skip_pager',
+        own_window_argb_visual = true,
+        own_window_argb_value = 128,
+	background = true,
+	use_spacer = 'none',
+
+	double_buffer = true,
+	minimum_width = 215, minimum_height = 215,
+
+	draw_shades = false,
+	default_shade_color = '#000000',
+
+	draw_outline = false,
+	default_outline_color = '#000000',
+
+	default_color = 'FFFFFF', 
+	color0 = 'FFFFFF',
+	color1 = 'FFA300',
+
+	draw_borders = false,
+	stippled_borders = 0,
+	border_inner_margin = 10,
+	border_outer_margin = 0,
+	border_width = 1,
+	draw_graph_borders = false,--no
+	alignment = 'top_left',
+
+	gap_x = 310,
+	gap_y = 49,
+
+	imlib_cache_size = 0,
+};
+
+
+conky.text = [[
+#
+#REFRESH LOCATION & WEATHER INFO CACHE
+${execi 600 curl -so ~/.cache/WeatherLoc 'https://api.bigdatacloud.net/data/ip-geolocation?localityLanguage=en&key=3131602e55a644299e1372eaa28f3fe5'&& printf "https://api.openweathermap.org/data/2.5/onecall?lat=%s&lon=%s&exclude=minutely,hourly&APPID=a6f8bedf50667be2d3764422a37077d2&units=metric" $(jq -r '.location.latitude' ~/.cache/WeatherLoc) $(jq -r '.location.longitude' ~/.cache/WeatherLoc)| xargs curl -so ~/.cache/WeatherData}
+#
+#REFRESH ICON CACHE
+${execi 600 sleep 2 && jq -r '.current.weather[0].icon' ~/.cache/WeatherData | xargs printf "http://openweathermap.org/img/wn/%s@2x.png" | xargs curl -so ~/.cache/WeatherNow.png}\
+${execi 600 sleep 2 && jq -r '.daily[0].weather[0].icon' ~/.cache/WeatherData | xargs printf "http://openweathermap.org/img/wn/%s@2x.png" | xargs curl -so ~/.cache/Weather0.png}\
+${execi 600 sleep 2 && jq -r '.daily[1].weather[0].icon' ~/.cache/WeatherData | xargs printf "http://openweathermap.org/img/wn/%s@2x.png" | xargs curl -so ~/.cache/Weather1.png}\
+${execi 600 sleep 2 && jq -r '.daily[2].weather[0].icon' ~/.cache/WeatherData | xargs printf "http://openweathermap.org/img/wn/%s@2x.png" | xargs curl -so ~/.cache/Weather2.png}\
+${execi 600 sleep 2 && jq -r '.daily[3].weather[0].icon' ~/.cache/WeatherData | xargs printf "http://openweathermap.org/img/wn/%s@2x.png" | xargs curl -so ~/.cache/Weather3.png}\
+${execi 600 sleep 2 && jq -r '.daily[4].weather[0].icon' ~/.cache/WeatherData | xargs printf "http://openweathermap.org/img/wn/%s@2x.png" | xargs curl -so ~/.cache/Weather4.png}
+#
+#WEATHER NOW
+${voffset -40}${color1}${execi 1 jq -r '.location.city' ~/.cache/WeatherLoc}
+${color0}${execi 1 jq -r '.current.temp' ~/.cache/WeatherData |awk '{print int($1+0.5)}'}° ${image ~/.cache/WeatherNow.png -s 70x70 -p 160,0}
+
+#WEATHER TODAY
+${color1}Today${goto 95}${color0}${execi 1 jq -r '.daily[0].temp.min' ~/.cache/WeatherData |awk '{print int($1+0.5)}'}°${goto 140}${execi 1 jq -r '.daily[0].temp.max' ~/.cache/WeatherData |awk '{print int($1+0.5)}'}°${image ~/.cache/Weather0.png -s 30x30 -p 180,83}
+#
+#WEATHER +1 DAY
+${color1}${execi 1 jq -r '.daily[1].dt' ~/.cache/WeatherData |awk '
+{print "@" $1}' |xargs date +%a --date}${goto 95}${color0}${execi 1 jq -r '.daily[1].temp.min' ~/.cache/WeatherData |awk '{print int($1+0.5)}'}°${goto 140}${execi 1 jq -r '.daily[1].temp.max' ~/.cache/WeatherData |awk '{print int($1+0.5)}'}°${image ~/.cache/Weather1.png -s 30x30 -p 180,108}
+#
+#WEATHER +2 DAYS
+${color1}${execi 1 jq -r '.daily[2].dt' ~/.cache/WeatherData |awk '
+{print "@" $1}' |xargs date +%a --date}${goto 95}${color0}${execi 1 jq -r '.daily[2].temp.min' ~/.cache/WeatherData |awk '{print int($1+0.5)}'}°${goto 140}${execi 1 jq -r '.daily[2].temp.max' ~/.cache/WeatherData |awk '{print int($1+0.5)}'}°${image ~/.cache/Weather2.png -s 30x30 -p 180,133}
+#
+#WEATHER +3 DAYS
+${color1}${execi 1 jq -r '.daily[3].dt' ~/.cache/WeatherData |awk '
+{print "@" $1}' |xargs date +%a --date}${goto 95}${color0}${execi 1 jq -r '.daily[3].temp.min' ~/.cache/WeatherData |awk '{print int($1+0.5)}'}°${goto 140}${execi 1 jq -r '.daily[3].temp.max' ~/.cache/WeatherData |awk '{print int($1+0.5)}'}°${image ~/.cache/Weather3.png -s 30x30 -p 180,158}
+#
+#WEATHER +4 DAYS
+${color1}${execi 1 jq -r '.daily[4].dt' ~/.cache/WeatherData |awk '
+{print "@" $1}' |xargs date +%a --date}${goto 95}${color0}${execi 1 jq -r '.daily[4].temp.min' ~/.cache/WeatherData |awk '{print int($1+0.5)}'}°${goto 140}${execi 1 jq -r '.daily[4].temp.max' ~/.cache/WeatherData |awk '{print int($1+0.5)}'}°${image ~/.cache/Weather3.png -s 30x30 -p 180,183}
+]];
